@@ -66,9 +66,10 @@
             }
 
             /* Tabele — horizontalni scroll */
-            .card { overflow-x: auto; }
-            table { min-width: 420px; }
-            th, td { padding: 9px 8px; font-size: 12px; }
+            .card { overflow-x: visible; }
+            .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+            .table-scroll table { min-width: 380px; }
+            th, td { padding: 8px 6px; font-size: 12px; }
 
             /* Finalni obračun */
             .final { padding: 18px 14px; border-radius: 10px; }
@@ -92,7 +93,18 @@
             .form-group select,
             input[type="number"],
             input[type="text"],
+            input[type="date"],
             select { padding: 12px 10px !important; font-size: 15px !important; border-radius: 8px; }
+
+            /* Kalendar - ne prekoračuje širinu */
+            input[type="date"] {
+                max-width: 100% !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+                -webkit-appearance: none !important;
+                appearance: none !important;
+                background-color: #fff !important;
+            }
 
             /* Broj slika u tabeli prodaje */
             input[style*="width:80px"] { width: 65px !important; font-size: 13px; }
@@ -139,15 +151,16 @@
                 <div class="stat-card"><div class="val" id="sZaProdaju" style="color:#2e7d32">0</div><div class="lbl">Za Prodaju</div></div>
             </div>
             <div id="statsInputGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;">
-                <div class="form-group"><label>Ukupno urađeno</label><input type="number" id="inpTot" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()"></div>
-                <div class="form-group"><label>Škart (Oštećene)</label><input type="number" id="inpSkart" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()"></div>
-                <div class="form-group"><label>Gratis (Poklon)</label><input type="number" id="inpGratis" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()"></div>
-                <div class="form-group"><label>Ostalo (Vratili)</label><input type="number" id="inpOst" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()"></div>
+                <div class="form-group"><label>Ukupno urađeno</label><input type="number" id="inpTot" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
+                <div class="form-group"><label>Škart (Oštećene)</label><input type="number" id="inpSkart" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
+                <div class="form-group"><label>Gratis (Poklon)</label><input type="number" id="inpGratis" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
+                <div class="form-group"><label>Ostalo (Vratili)</label><input type="number" id="inpOst" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
             </div>
         </div>
 
         <div class="card">
             <h2>Dodatni Troškovi (Kupovina)</h2>
+            <div class="table-scroll">
             <table>
                 <thead>
                     <tr><th>Stavka / Opis</th><th>Iznos</th><th>Valuta</th><th>Ukupno (DIN)</th><th></th></tr>
@@ -161,24 +174,26 @@
                     </tr>
                 </tfoot>
             </table>
+            </div>
             <button class="add-btn" onclick="addExtraCostRow()">+ Dodaj trošak (npr. Sokovi, Čepići...)</button>
         </div>
 
         <div class="card">
             <h2>Obračun Prodaje</h2>
+            <div class="table-scroll">
             <table>
                 <thead>
-                    <tr><th>Tip</th><th>Broj Slika</th><th>Cijena</th><th>Suma (DIN)</th></tr>
+                    <tr><th>Tip</th><th>Br. Slika</th><th>Cijena</th><th>Suma (DIN)</th></tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td> Slika 200 RSD (Uža porodica)</td>
-                        <td><input type="number" id="inp200Qty" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" style="width:80px"></td>
+                        <td>Slika 200 RSD<br><small style="color:#888">(Uža porodica)</small></td>
+                        <td><input type="number" id="inp200Qty" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:72px"></td>
                         <td>200</td>
                         <td id="res200Tot">0 DIN</td>
                     </tr>
                     <tr>
-                        <td> Slika 300 RSD (Gosti)</td>
+                        <td>Slika 300 RSD<br><small style="color:#888">(Gosti)</small></td>
                         <td id="res300Qty" style="font-weight:bold; color:#4a90e2">0</td>
                         <td>300</td>
                         <td id="res300Tot">0 DIN</td>
@@ -188,6 +203,7 @@
                     <tr class="total-row"><td colspan="3">OČEKIVANI PRIHOD</td><td id="grandTotal">0 DIN</td></tr>
                 </tfoot>
             </table>
+            </div>
         </div>
 
         <div class="final">
@@ -196,7 +212,7 @@
             <div class="frow" style="color: #ffb74d;"><span>Troškovi nabavke (Odbija se)</span><span class="fv" id="fMinusCosts">- 0 DIN</span></div>
             <div class="frow">
                 <span>Stvarno stanje u kasi</span>
-                <span class="fv"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()"> DIN</span>
+                <span class="fv"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> DIN</span>
             </div>
             <div class="frow big">
                 <span>RAZLIKA (Fali / Višak)</span>
@@ -214,7 +230,7 @@ function addExtraCostRow() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
         <td><input type="text" placeholder="Opis..."></td>
-        <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()"></td>
+        <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></td>
         <td><select onchange="calculate()"><option value="DIN">DIN</option><option value="EUR">EUR</option></select></td>
         <td class="row-din">0 DIN</td>
         <td><button class="del-btn" onclick="this.closest('tr').remove(); calculate()">✕</button></td>
