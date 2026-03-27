@@ -58,6 +58,15 @@
 
         .pdf-mode .add-btn, .pdf-mode .del-btn, .pdf-mode .actions-bar { display: none !important; }
 
+        /* ✅ NOVO: Čisti izgled inputa i selecta u PDF modu */
+        .pdf-mode input, .pdf-mode select {
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            color: #1a1a2e !important;
+            pointer-events: none;
+        }
+
         @media (max-width: 600px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
             .stats-grid div:last-child { grid-column: span 2; }
@@ -187,7 +196,6 @@ const KURS = 117;
 
 function addExtraCostRow() {
     const tr = document.createElement('tr');
-    // Dodato u template: inputmode="numeric" pattern="[0-9]*" za iznos troška
     tr.innerHTML = `
         <td><input type="text" placeholder="Opis..." style="width:100%; border:none; background:transparent"></td>
         <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:100%; border:none; background:transparent"></td>
