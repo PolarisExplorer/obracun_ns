@@ -168,7 +168,7 @@
         <div class="final">
             <h2>Finalni Obračun</h2>
             <div class="frow"><span>Teorijski pazar (Prihod)</span><span class="fv" id="fNeeded">0 DIN</span></div>
-            <div class="frow" style="opacity: 0.7;"><span>Ukupni troškovi (Informativno)</span><span class="fv" id="fMinusCosts">0 DIN</span></div>
+            <div class="frow" style="opacity:0.7;"><span>Ukupni troškovi (Informativno)</span><span class="fv" id="fMinusCosts">0 DIN</span></div>
             <div class="frow">
                 <span>Stvarno stanje u kasi</span>
                 <span class="fv" id="fCollectedWrap"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> DIN</span>
@@ -272,20 +272,31 @@ function generatePDF() {
     const printArea = document.getElementById('print-area');
     container.classList.add('pdf-mode');
 
-    // --- FIX: bijela pozadina da html2canvas ne probija gradijent ---
-    const oldBodyBg = document.body.style.background;
-    const oldPrintBg = printArea.style.background;
-    document.body.style.background = '#ffffff';
-    printArea.style.background     = '#ffffff';
-    printArea.style.padding        = '10px';
-
-    // --- Skloni animacije sa kartica ---
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(c => {
-        c.style.animation  = 'none';
-        c.style.background = '#ffffff';
-        c.style.boxShadow  = '0 1px 4px rgba(0,0,0,0.08)';
-    });
+    // --- KLJUČNI FIX: style tag sa !important koji pregazi sve ---
+    const styleOverride = document.createElement('style');
+    styleOverride.id = 'pdf-style-override';
+    styleOverride.textContent = `
+        body, #print-area, #main-container {
+            background: #ffffff !important;
+            background-image: none !important;
+        }
+        .card, .stat-input-card, .table-scroll, table, th, td {
+            background: #ffffff !important;
+            background-image: none !important;
+            box-shadow: none !important;
+            animation: none !important;
+        }
+        .stat-input-card:nth-child(5) {
+            background: #f1f8e9 !important;
+        }
+        .total-row td {
+            background: #f8f9fa !important;
+        }
+        th {
+            background: #f8f9fa !important;
+        }
+    `;
+    document.head.appendChild(styleOverride);
 
     // --- Zamijeni inpute/selecte sa span elementima ---
     const swaps = [];
@@ -329,15 +340,8 @@ function generatePDF() {
         // --- Vrati sve na original ---
         swaps.forEach(({ span, inp }) => span.parentNode.replaceChild(inp, span));
 
-        document.body.style.background = oldBodyBg;
-        printArea.style.background     = oldPrintBg;
-        printArea.style.padding        = '';
-
-        cards.forEach(c => {
-            c.style.animation  = '';
-            c.style.background = '';
-            c.style.boxShadow  = '';
-        });
+        const overrideEl = document.getElementById('pdf-style-override');
+        if (overrideEl) overrideEl.remove();
 
         document.getElementById('cardOsnovni').style.display = '';
         if (!hasTroskovi) cardTroskovi.style.display = '';
