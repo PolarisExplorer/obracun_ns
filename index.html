@@ -33,7 +33,6 @@
         .form-group input, .form-group select{width:100%;padding:10px;border:2px solid #eee;border-radius:8px;font-size:14px;font-family:inherit}
         .form-group input:focus, .form-group select:focus { border-color: #4a90e2; box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15); }
         
-        /* Statistika - Nova polja */
         .stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
         .stat-input-card{background:#fff;border-radius:10px;padding:12px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.05);border-bottom:3px solid #eee;display:flex;flex-direction:column;align-items:center}
         .stat-input-card .lbl{font-size:9px;color:#999;text-transform:uppercase;margin-bottom:8px;font-weight:700}
@@ -97,19 +96,19 @@
             <div class="stats-grid">
                 <div class="stat-input-card">
                     <div class="lbl">Ukupno</div>
-                    <input type="number" id="inpTot" value="0" oninput="calculate()" onfocus="this.select()">
+                    <input type="number" id="inpTot" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()">
                 </div>
                 <div class="stat-input-card">
                     <div class="lbl" style="color:#c62828">Škart</div>
-                    <input type="number" id="inpSkart" value="0" style="color:#c62828" oninput="calculate()" onfocus="this.select()">
+                    <input type="number" id="inpSkart" value="0" inputmode="numeric" pattern="[0-9]*" style="color:#c62828" oninput="calculate()" onfocus="this.select()">
                 </div>
                 <div class="stat-input-card">
                     <div class="lbl" style="color:#1565c0">Gratis</div>
-                    <input type="number" id="inpGratis" value="0" style="color:#1565c0" oninput="calculate()" onfocus="this.select()">
+                    <input type="number" id="inpGratis" value="0" inputmode="numeric" pattern="[0-9]*" style="color:#1565c0" oninput="calculate()" onfocus="this.select()">
                 </div>
                 <div class="stat-input-card">
                     <div class="lbl" style="color:#e65100">Ostalo</div>
-                    <input type="number" id="inpOst" value="0" style="color:#e65100" oninput="calculate()" onfocus="this.select()">
+                    <input type="number" id="inpOst" value="0" inputmode="numeric" pattern="[0-9]*" style="color:#e65100" oninput="calculate()" onfocus="this.select()">
                 </div>
                 <div class="stat-input-card readonly">
                     <div class="lbl" style="color:#2e7d32">Za Prodaju</div>
@@ -148,7 +147,7 @@
                 <tbody>
                     <tr>
                         <td>Slika 200 RSD<br><small style="color:#888">(Uža porodica)</small></td>
-                        <td><input type="number" id="inp200Qty" value="0" oninput="calculate()" onfocus="this.select()" style="width:72px; padding:5px; border:1px solid #eee; border-radius:4px"></td>
+                        <td><input type="number" id="inp200Qty" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:72px; padding:5px; border:1px solid #eee; border-radius:4px"></td>
                         <td>200</td>
                         <td id="res200Tot">0 DIN</td>
                     </tr>
@@ -172,7 +171,7 @@
             <div class="frow" style="opacity: 0.7;"><span>Ukupni troškovi (Informativno)</span><span class="fv" id="fMinusCosts">0 DIN</span></div>
             <div class="frow">
                 <span>Stvarno stanje u kasi</span>
-                <span class="fv"><input class="inp-dark" type="number" id="fCollected" value="0" oninput="calculate()" onfocus="this.select()"> DIN</span>
+                <span class="fv"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> DIN</span>
             </div>
             <div class="frow big">
                 <span>RAZLIKA (Fali / Višak)</span>
@@ -188,9 +187,10 @@ const KURS = 117;
 
 function addExtraCostRow() {
     const tr = document.createElement('tr');
+    // Dodato u template: inputmode="numeric" pattern="[0-9]*" za iznos troška
     tr.innerHTML = `
         <td><input type="text" placeholder="Opis..." style="width:100%; border:none; background:transparent"></td>
-        <td><input type="number" value="0" oninput="calculate()" onfocus="this.select()" style="width:100%; border:none; background:transparent"></td>
+        <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:100%; border:none; background:transparent"></td>
         <td><select onchange="calculate()" style="border:none; background:transparent"><option value="DIN">DIN</option><option value="EUR">EUR</option></select></td>
         <td class="row-din">0 DIN</td>
         <td><button class="del-btn" onclick="this.closest('tr').remove(); calculate()">✕</button></td>
@@ -227,7 +227,6 @@ function calculate() {
     document.getElementById('totExtraCosts').textContent = N(totalExtraDin) + ' DIN';
 
     const collected = parseFloat(document.getElementById('fCollected').value) || 0;
-    // RAZLIKA SE SADA RAČUNA BEZ ODUZIMANJA TROŠKOVA
     const razlika = collected - prihod;
 
     document.getElementById('fNeeded').textContent = N(prihod) + ' DIN';
