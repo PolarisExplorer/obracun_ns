@@ -7,427 +7,63 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #4a90e2;
-            --accent: #64ffda;
-            --dark: #1a1a2e;
-            --danger: #c62828;
-            --success: #2e7d32;
-            --warning: #e65100;
-            --info: #1565c0;
-            --bg: linear-gradient(160deg, #edf2fb 0%, #f5f0ff 100%);
-            --card-shadow: 0 4px 20px rgba(0,0,0,0.06);
-            --card-shadow-hover: 0 12px 32px rgba(0,0,0,0.10);
-            --border-radius: 16px;
-            --input-border: #e2e8f0;
-        }
-
         @keyframes shimmer {
-            0%   { background-position: 0% 50%; }
-            50%  { background-position: 100% 50%; }
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(15px); }
-            to   { opacity: 1; transform: translateY(0); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: #334155;
-            padding: 24px 20px;
-            min-height: 100vh;
-        }
-
-        .container { max-width: 900px; margin: 0 auto; }
-
-        /* ===== HEADER ===== */
-        .header {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-size: 200% 200%;
-            animation: shimmer 8s ease infinite;
-            border-left: 5px solid var(--accent);
-            color: white;
-            padding: 30px 34px;
-            border-radius: var(--border-radius);
-            margin-bottom: 22px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(100, 255, 218, 0.15);
-        }
-        .header h1 {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 4px;
-        }
-        .header p {
-            font-size: 13px;
-            opacity: 0.65;
-            font-weight: 400;
-        }
-        .header-meta {
-            text-align: right;
-            font-size: 14px;
-            opacity: .9;
-            font-weight: normal;
-            line-height: 1.6;
-        }
-
-        /* ===== ACTIONS BAR ===== */
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Inter',sans-serif;background:linear-gradient(160deg,#e8edf5 0%,#f5f0ff 100%);color:#333;padding:20px;min-height:100vh}
+        .container{max-width:900px;margin:0 auto}
+        .header{background:linear-gradient(135deg,#1a1a2e,#2b3a67,#16213e);background-size:200% 200%;animation:shimmer 8s ease infinite;border-left:5px solid #64ffda;color:white;padding:28px 32px;border-radius:14px;margin-bottom:22px;display:flex;justify-content:space-between;align-items:center}
+        .header h1{font-size:26px;margin-bottom:4px}
+        .header-meta{text-align:right;font-size:14px;opacity:.9;font-weight:normal;}
         .actions-bar { margin-bottom: 20px; }
-        .btn-pdf {
-            background: linear-gradient(135deg, #4a90e2, #667eea);
-            color: white;
-            border: none;
-            padding: 13px 28px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-            transition: all 0.25s ease;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.35);
-        }
-        .btn-pdf:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(74, 144, 226, 0.45);
-        }
-        .btn-pdf:active { transform: translateY(0); }
-
-        /* ===== CARD ===== */
-        .card {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 26px;
-            margin-bottom: 20px;
-            box-shadow: var(--card-shadow);
-            page-break-inside: avoid;
-            animation: fadeInUp 0.4s ease-out forwards;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--card-shadow-hover);
-        }
-        .card:nth-child(2) { animation-delay: 0.05s; }
-        .card:nth-child(3) { animation-delay: 0.1s; }
-        .card:nth-child(4) { animation-delay: 0.15s; }
-        .card:nth-child(5) { animation-delay: 0.2s; }
-        .card:nth-child(6) { animation-delay: 0.25s; }
-        .card h2 {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--dark);
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #f0f2f5;
-            letter-spacing: -0.2px;
-        }
-
-        /* ===== FORM ===== */
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 700;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 7px;
-        }
+        .btn-pdf { background: #4a90e2; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 15px; transition: 0.2s; }
+        .btn-pdf:hover { background: #357abd; }
+        .card{background:white;border-radius:14px;padding:24px;margin-bottom:20px;box-shadow:0 4px 15px rgba(0,0,0,.05); page-break-inside: avoid; animation: fadeInUp 0.4s ease-out forwards;}
+        .card h2{font-size:17px;color:#1a1a2e;margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid #f0f2f5}
+        .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+        .form-group label{display:block;font-size:11px;font-weight:700;color:#888;text-transform:uppercase;margin-bottom:6px}
         input, select { transition: all 0.2s ease; outline: none; }
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 11px 14px;
-            border: 2px solid var(--input-border);
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            background: #fafbff;
-            color: #1e293b;
-        }
-        .form-group input:focus,
-        .form-group select:focus,
-        td input:focus,
-        td select:focus {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.12);
-            transform: translateY(-1px);
-        }
+        .form-group input, .form-group select{width:100%;padding:10px;border:2px solid #eee;border-radius:8px;font-size:14px;font-family:inherit}
+        .form-group input:focus, .form-group select:focus { border-color: #4a90e2; box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.15); }
+        
+        /* Statistika - Nova polja */
+        .stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+        .stat-input-card{background:#fff;border-radius:10px;padding:12px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.05);border-bottom:3px solid #eee;display:flex;flex-direction:column;align-items:center}
+        .stat-input-card .lbl{font-size:9px;color:#999;text-transform:uppercase;margin-bottom:8px;font-weight:700}
+        .stat-input-card input{width:100%;border:none;text-align:center;font-size:20px;font-weight:700;color:#333;background:transparent}
+        .stat-input-card.readonly input{pointer-events:none}
+        .stat-input-card:nth-child(1){border-bottom-color:#333;}
+        .stat-input-card:nth-child(2){border-bottom-color:#c62828;}
+        .stat-input-card:nth-child(3){border-bottom-color:#1565c0;}
+        .stat-input-card:nth-child(4){border-bottom-color:#e65100;}
+        .stat-input-card:nth-child(5){border-bottom-color:#2e7d32;background:#f1f8e9}
 
-        /* ===== TABELE ===== */
-        table { width: 100%; border-collapse: collapse; }
-        th {
-            background: #f8faff;
-            padding: 12px 14px;
-            text-align: left;
-            font-size: 11px;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            font-weight: 700;
-        }
-        td {
-            padding: 10px 14px;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 14px;
-            transition: background 0.15s;
-            vertical-align: middle;
-        }
-        tbody tr:nth-child(even) td { background: #f8faff; }
-        tbody tr:hover td { background: #e8f0fe !important; }
-        .total-row td { font-weight: 700; background: #f8faff; color: var(--dark); }
-        .total-row:hover td { background: #f8faff; }
+        table{width:100%;border-collapse:collapse}
+        th{background:#f8f9fa;padding:12px;text-align:left;font-size:11px;color:#777;text-transform:uppercase}
+        td{padding:12px;border-bottom:1px solid #f4f4f4;font-size:14px}
+        .total-row td{font-weight:700;background:#f8f9fa;color:#1a1a2e}
+        .final{background:linear-gradient(135deg,#1a1a2e,#16213e);color:white;border-radius:14px;padding:26px; page-break-inside: avoid;}
+        .frow{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+        .frow.big {margin-top:10px;padding-top:15px;border-top:1px dashed rgba(255,255,255,0.2);}
+        .frow.big .fv{font-size:24px;color:#64ffda;font-weight:700}
+        .add-btn{margin-top:12px;background:#f0f7ff;color:#4a90e2;border:2px solid #4a90e2;width:100%;padding:12px;border-radius:10px;cursor:pointer;font-weight:bold;}
+        .del-btn{background:#ffebee;color:#c62828;border:none;border-radius:6px;padding:5px 10px;cursor:pointer;}
+        .inp-dark{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.3);color:white;padding:6px 10px;border-radius:7px;width:130px;text-align:right;font-size:16px;}
 
-        /* Inputi i selecti unutar tabele */
-        td input[type="text"],
-        td input[type="number"] {
-            padding: 8px 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 13px;
-            font-family: inherit;
-            background: #fafbff;
-            color: #1e293b;
-            transition: all 0.2s ease;
-            outline: none;
-            width: 100%;
-        }
-        td input[type="text"]:focus,
-        td input[type="number"]:focus {
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(74,144,226,0.12);
-            transform: translateY(-1px);
-        }
-        td select {
-            padding: 8px 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 13px;
-            font-family: inherit;
-            background: #fafbff;
-            color: #1e293b;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            outline: none;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            padding-right: 30px;
-        }
-        td select:focus {
-            border-color: var(--primary);
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(74,144,226,0.12);
-        }
-        /* Kolona za unos u tabeli prodaje */
-        td input[style*="width:72px"] {
-            width: 72px !important;
-            text-align: center;
-            font-weight: 700;
-            font-size: 15px;
-        }
+        .pdf-mode .add-btn, .pdf-mode .del-btn, .pdf-mode .actions-bar { display: none !important; }
 
-        /* ===== STATS GRID ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-        }
-        .stat-card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 16px 12px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-bottom: 3px solid transparent;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.09);
-        }
-        .stat-card:nth-child(1) { border-bottom-color: #475569; }
-        .stat-card:nth-child(2) { border-bottom-color: var(--danger); }
-        .stat-card:nth-child(3) { border-bottom-color: var(--info); }
-        .stat-card:nth-child(4) { border-bottom-color: var(--warning); }
-        .stat-card:nth-child(5) { border-bottom-color: var(--success); }
-        .stat-card .val { font-size: 22px; font-weight: 800; }
-        .stat-card .lbl {
-            font-size: 9px;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 5px;
-            font-weight: 600;
-        }
-
-        /* ===== FINALNI OBRAČUN ===== */
-        .final {
-            background: linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e);
-            color: white;
-            border-radius: var(--border-radius);
-            padding: 28px 30px;
-            page-break-inside: avoid;
-            box-shadow: 0 8px 32px rgba(15, 12, 41, 0.3);
-        }
-        .final h2 {
-            font-size: 16px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.12);
-            letter-spacing: -0.2px;
-        }
-        .frow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 13px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .frow.big {
-            margin-top: 12px;
-            padding: 16px 18px;
-            background: rgba(100, 255, 218, 0.08);
-            border-radius: 12px;
-            border: none;
-        }
-        .frow.big .fv {
-            font-size: 26px;
-            color: var(--accent);
-            font-weight: 800;
-            text-shadow: 0 0 14px rgba(100, 255, 218, 0.4);
-        }
-
-        /* ===== ADD BTN ===== */
-        .add-btn {
-            margin-top: 14px;
-            background: linear-gradient(135deg, #f0f7ff, #e8f4ff);
-            color: var(--primary);
-            border: 2px solid var(--primary);
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-        .add-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-1px);
-            box-shadow: 0 5px 14px rgba(74,144,226,0.32);
-        }
-
-        /* ===== DEL BTN ===== */
-        .del-btn {
-            background: #fff0f0;
-            color: var(--danger);
-            border: none;
-            border-radius: 7px;
-            padding: 6px 11px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: all 0.2s;
-        }
-        .del-btn:hover { background: #ffcdd2; transform: scale(1.06); }
-
-        /* ===== DARK INPUT ===== */
-        .inp-dark {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 7px 11px;
-            border-radius: 8px;
-            width: 130px;
-            text-align: right;
-            font-size: 16px;
-            transition: all 0.2s ease;
-        }
-        .inp-dark:focus {
-            background: rgba(255,255,255,0.2);
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(100,255,218,0.2);
-            outline: none;
-            transform: translateY(-1px);
-        }
-
-        /* ===== PDF MODE ===== */
-        .pdf-mode .add-btn,
-        .pdf-mode .del-btn,
-        .pdf-mode .actions-bar { display: none !important; }
-        .pdf-mode input,
-        .pdf-mode select { border: none !important; background: transparent !important; padding: 0 !important; appearance: none; }
-        .pdf-mode .card { box-shadow: none !important; border: 1px solid #eee !important; }
-
-        /* ===== MOBILNA OPTIMIZACIJA ===== */
         @media (max-width: 600px) {
-            body { padding: 12px 10px; }
-            .header { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px 18px; }
-            .header h1 { font-size: 20px; }
-            .header-meta { text-align: left; font-size: 12px; }
-            .card { padding: 16px 14px; border-radius: 12px; }
-            .card h2 { font-size: 15px; }
-            .form-grid { grid-template-columns: 1fr !important; gap: 12px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
-            .stat-card .val { font-size: 18px; }
-            div[style*="grid-template-columns:repeat(4,1fr)"],
-            div[style*="grid-template-columns: repeat(4, 1fr)"] {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 12px;
-            }
-            .card { overflow-x: visible; }
-            .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
-            .table-scroll table { min-width: 380px; }
-            th, td { padding: 8px 6px; font-size: 12px; }
-            .final { padding: 18px 16px; border-radius: 12px; }
-            .final h2 { font-size: 15px; margin-bottom: 10px; }
-            .frow { flex-direction: column; gap: 4px; padding: 10px 0; }
-            .frow span:first-child { font-size: 12px; opacity: 0.8; }
-            .frow .fv { font-size: 18px; }
-            .frow.big { padding: 12px 14px; }
-            .frow.big .fv { font-size: 22px; }
-            .inp-dark { width: 110px !important; font-size: 14px; }
-            .btn-pdf { width: 100%; padding: 14px; font-size: 14px; border-radius: 10px; }
-            .add-btn { font-size: 13px; padding: 12px; }
-            .form-group input,
-            .form-group select,
-            input[type="number"],
-            input[type="text"],
-            input[type="date"],
-            select { padding: 12px 10px !important; font-size: 15px !important; border-radius: 8px; }
-            input[type="date"] {
-                max-width: 100% !important;
-                width: 100% !important;
-                box-sizing: border-box !important;
-                -webkit-appearance: none !important;
-                appearance: none !important;
-                background-color: #fff !important;
-            }
-            input[style*="width:80px"] { width: 65px !important; font-size: 13px; }
-        }
-
-        @media (max-width: 380px) {
-            .stats-grid { grid-template-columns: 1fr 1fr !important; }
-            .header h1 { font-size: 17px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .stats-grid div:last-child { grid-column: span 2; }
+            .frow { flex-direction: column; }
+            .inp-dark { width: 100%; margin-top: 5px; }
         }
     </style>
 </head>
@@ -451,7 +87,7 @@
             <h2>Osnovni Podaci</h2>
             <div class="form-grid">
                 <div class="form-group"><label>Ime Sale</label><input type="text" id="saleName" placeholder="Naziv sale..." oninput="updateHeader()"></div>
-                <div class="form-group"><label>Datum (Kalendar)</label><input type="date" id="eventDate" oninput="updateHeader()"></div>
+                <div class="form-group"><label>Datum</label><input type="date" id="eventDate" oninput="updateHeader()"></div>
                 <div class="form-group"><label>Mladenci</label><input type="text" id="couple" placeholder="Ime i prezime..." oninput="updateHeader()"></div>
             </div>
         </div>
@@ -459,22 +95,31 @@
         <div class="card">
             <h2>Statistika Slika</h2>
             <div class="stats-grid">
-                <div class="stat-card"><div class="val" id="sTot">0</div><div class="lbl">Ukupno</div></div>
-                <div class="stat-card"><div class="val" id="sSkart" style="color:#c62828">0</div><div class="lbl">Škart</div></div>
-                <div class="stat-card"><div class="val" id="sGratis" style="color:#1565c0">0</div><div class="lbl">Gratis</div></div>
-                <div class="stat-card"><div class="val" id="sOst" style="color:#e65100">0</div><div class="lbl">Ostalo</div></div>
-                <div class="stat-card"><div class="val" id="sZaProdaju" style="color:#2e7d32">0</div><div class="lbl">Za Prodaju</div></div>
-            </div>
-            <div id="statsInputGrid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:20px;">
-                <div class="form-group"><label>Ukupno urađeno</label><input type="number" id="inpTot" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
-                <div class="form-group"><label>Škart (Oštećene)</label><input type="number" id="inpSkart" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
-                <div class="form-group"><label>Gratis (Poklon)</label><input type="number" id="inpGratis" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
-                <div class="form-group"><label>Ostalo (Vratili)</label><input type="number" id="inpOst" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"></div>
+                <div class="stat-input-card">
+                    <div class="lbl">Ukupno</div>
+                    <input type="number" id="inpTot" value="0" oninput="calculate()" onfocus="this.select()">
+                </div>
+                <div class="stat-input-card">
+                    <div class="lbl" style="color:#c62828">Škart</div>
+                    <input type="number" id="inpSkart" value="0" style="color:#c62828" oninput="calculate()" onfocus="this.select()">
+                </div>
+                <div class="stat-input-card">
+                    <div class="lbl" style="color:#1565c0">Gratis</div>
+                    <input type="number" id="inpGratis" value="0" style="color:#1565c0" oninput="calculate()" onfocus="this.select()">
+                </div>
+                <div class="stat-input-card">
+                    <div class="lbl" style="color:#e65100">Ostalo</div>
+                    <input type="number" id="inpOst" value="0" style="color:#e65100" oninput="calculate()" onfocus="this.select()">
+                </div>
+                <div class="stat-input-card readonly">
+                    <div class="lbl" style="color:#2e7d32">Za Prodaju</div>
+                    <input type="number" id="sZaProdaju" value="0" style="color:#2e7d32" readonly>
+                </div>
             </div>
         </div>
 
         <div class="card">
-            <h2>Dodatni Troškovi (Kupovina)</h2>
+            <h2>Dodatni Troškovi (Informativno)</h2>
             <div class="table-scroll">
             <table>
                 <thead>
@@ -483,7 +128,7 @@
                 <tbody id="extraCostsBody"></tbody>
                 <tfoot>
                     <tr class="total-row">
-                        <td colspan="3">UKUPNO TROŠKOVI</td>
+                        <td colspan="3">SUMA TROŠKOVA</td>
                         <td id="totExtraCosts">0 DIN</td>
                         <td></td>
                     </tr>
@@ -502,20 +147,20 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Slika 200 RSD<br><small style="color:#94a3b8">(Uža porodica)</small></td>
-                        <td><input type="number" id="inp200Qty" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:72px"></td>
+                        <td>Slika 200 RSD<br><small style="color:#888">(Uža porodica)</small></td>
+                        <td><input type="number" id="inp200Qty" value="0" oninput="calculate()" onfocus="this.select()" style="width:72px; padding:5px; border:1px solid #eee; border-radius:4px"></td>
                         <td>200</td>
                         <td id="res200Tot">0 DIN</td>
                     </tr>
                     <tr>
-                        <td>Slika 300 RSD<br><small style="color:#94a3b8">(Gosti)</small></td>
+                        <td>Slika 300 RSD<br><small style="color:#888">(Gosti)</small></td>
                         <td id="res300Qty" style="font-weight:bold; color:#4a90e2">0</td>
                         <td>300</td>
                         <td id="res300Tot">0 DIN</td>
                     </tr>
                 </tbody>
                 <tfoot>
-                    <tr class="total-row"><td colspan="3">OČEKIVANI PRIHOD</td><td id="grandTotal">0 DIN</td></tr>
+                    <tr class="total-row"><td colspan="3">TEORIJSKI PAZAR</td><td id="grandTotal">0 DIN</td></tr>
                 </tfoot>
             </table>
             </div>
@@ -524,10 +169,10 @@
         <div class="final">
             <h2>Finalni Obračun</h2>
             <div class="frow"><span>Teorijski pazar (Prihod)</span><span class="fv" id="fNeeded">0 DIN</span></div>
-            <div class="frow" style="color: #ffb74d;"><span>Troškovi nabavke (Odbija se)</span><span class="fv" id="fMinusCosts">- 0 DIN</span></div>
+            <div class="frow" style="opacity: 0.7;"><span>Ukupni troškovi (Informativno)</span><span class="fv" id="fMinusCosts">0 DIN</span></div>
             <div class="frow">
                 <span>Stvarno stanje u kasi</span>
-                <span class="fv"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> DIN</span>
+                <span class="fv"><input class="inp-dark" type="number" id="fCollected" value="0" oninput="calculate()" onfocus="this.select()"> DIN</span>
             </div>
             <div class="frow big">
                 <span>RAZLIKA (Fali / Višak)</span>
@@ -544,10 +189,10 @@ const KURS = 117;
 function addExtraCostRow() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-        <td><input type="text" placeholder="Opis stavke..." style="min-width:120px"></td>
-        <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="max-width:110px;text-align:right;font-weight:600"></td>
-        <td><select onchange="calculate()"><option value="DIN">DIN</option><option value="EUR">EUR</option></select></td>
-        <td class="row-din" style="font-weight:600;color:#1e293b">0 DIN</td>
+        <td><input type="text" placeholder="Opis..." style="width:100%; border:none; background:transparent"></td>
+        <td><input type="number" value="0" oninput="calculate()" onfocus="this.select()" style="width:100%; border:none; background:transparent"></td>
+        <td><select onchange="calculate()" style="border:none; background:transparent"><option value="DIN">DIN</option><option value="EUR">EUR</option></select></td>
+        <td class="row-din">0 DIN</td>
         <td><button class="del-btn" onclick="this.closest('tr').remove(); calculate()">✕</button></td>
     `;
     document.getElementById('extraCostsBody').appendChild(tr);
@@ -565,11 +210,7 @@ function calculate() {
     const slike300 = Math.max(0, zaProdaju - slike200);
     const prihod = (slike200 * 200) + (slike300 * 300);
 
-    document.getElementById('sTot').textContent = N(total);
-    document.getElementById('sSkart').textContent = N(skart);
-    document.getElementById('sGratis').textContent = N(gratis);
-    document.getElementById('sOst').textContent = N(ostalo);
-    document.getElementById('sZaProdaju').textContent = N(zaProdaju);
+    document.getElementById('sZaProdaju').value = zaProdaju;
     document.getElementById('res300Qty').textContent = N(slike300);
     document.getElementById('res200Tot').textContent = N(slike200 * 200) + ' DIN';
     document.getElementById('res300Tot').textContent = N(slike300 * 300) + ' DIN';
@@ -586,16 +227,15 @@ function calculate() {
     document.getElementById('totExtraCosts').textContent = N(totalExtraDin) + ' DIN';
 
     const collected = parseFloat(document.getElementById('fCollected').value) || 0;
-    const netoPotrebno = prihod - totalExtraDin;
-    const razlika = collected - netoPotrebno;
+    // RAZLIKA SE SADA RAČUNA BEZ ODUZIMANJA TROŠKOVA
+    const razlika = collected - prihod;
 
     document.getElementById('fNeeded').textContent = N(prihod) + ' DIN';
-    document.getElementById('fMinusCosts').textContent = '- ' + N(totalExtraDin) + ' DIN';
-
+    document.getElementById('fMinusCosts').textContent = N(totalExtraDin) + ' DIN';
+    
     const diffEl = document.getElementById('fDiff');
     diffEl.textContent = (razlika >= 0 ? '+' : '') + N(razlika) + ' DIN';
     diffEl.style.color = razlika >= 0 ? '#64ffda' : '#ff6b6b';
-    diffEl.style.textShadow = razlika >= 0 ? '0 0 14px rgba(100,255,218,0.5)' : '0 0 14px rgba(255,107,107,0.5)';
 }
 
 function updateHeader() {
@@ -606,51 +246,28 @@ function updateHeader() {
         formattedDate = d.getDate() + "." + (d.getMonth()+1) + "." + d.getFullYear() + ".";
     }
     const sala = document.getElementById('saleName').value || "Bez naziva";
-    const mladenci = document.getElementById('couple').value;
-    const mladenciLine = mladenci ? '<br>' + mladenci : '';
-    document.getElementById('headerMeta').innerHTML = sala + '<br>' + formattedDate + mladenciLine;
+    const mladenci = document.getElementById('couple').value || "";
+    const mladenciLine = mladenci ? `<br>${mladenci}` : "";
+    document.getElementById('headerMeta').innerHTML = `${sala}<br>${formattedDate}${mladenciLine}`;
 }
 
 function generatePDF() {
     const element = document.getElementById('print-area');
     const container = document.getElementById('main-container');
     container.classList.add('pdf-mode');
+
     const opt = {
-        margin: [10, 10, 10, 10],
-        filename: (() => {
-            const s = (document.getElementById('saleName').value || 'Studio').trim().replace(/\s+/g, '_');
-            const rawDate = document.getElementById('eventDate').value;
-            let d = '';
-            if(rawDate) { const dt = new Date(rawDate); d = dt.getDate()+'.'+( dt.getMonth()+1)+'.'+dt.getFullYear(); }
-            const m = (document.getElementById('couple').value || '').trim().replace(/\s+/g, '_');
-            const parts = ['obracun', s, d, m].filter(x => x);
-            return parts.join('_') + '.pdf';
-        })(),
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        margin:       [10, 10, 10, 10],
+        filename:     'obracun.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
+
     html2pdf().set(opt).from(element).save().then(() => {
         container.classList.remove('pdf-mode');
     });
 }
-</script>
-
-<script>
-(function() {
-    function fixGrid() {
-        var el = document.getElementById('statsInputGrid');
-        if(!el) return;
-        if(window.innerWidth < 600) {
-            el.style.gridTemplateColumns = 'repeat(2,1fr)';
-        } else {
-            el.style.gridTemplateColumns = 'repeat(4,1fr)';
-        }
-    }
-    window.addEventListener('resize', fixGrid);
-    document.addEventListener('DOMContentLoaded', fixGrid);
-})();
 </script>
 
 </body>
