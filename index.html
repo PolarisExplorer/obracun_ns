@@ -134,7 +134,7 @@
                 </tfoot>
             </table>
             </div>
-            <button class="add-btn" onclick="addExtraCostRow()">+ Dodaj trošak (npr. Sokovi, Čepići...)</button>
+            <button class="add-btn" onclick="addExtraCostRow()">+ Dodaj trošak (npr. Sokovi...)</button>
         </div>
 
         <div class="card">
@@ -142,11 +142,11 @@
             <div class="table-scroll">
             <table>
                 <thead>
-                    <tr><th>Tip</th><th>Br. Slika</th><th>Cijena</th><th>Suma (DIN)</th></tr>
+                    <tr><th>Tip</th><th>Br. Slika</th><th>Cena</th><th>Suma (DIN)</th></tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Slika 200 RSD<br><small style="color:#888">(Uža porodica)</small></td>
+                        <td>Slika 200 RSD<br><small style="color:#888">(Uža porodica/kumovi)</small></td>
                         <td><input type="number" id="inp200Qty" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:72px; padding:5px; border:1px solid #eee; border-radius:4px"></td>
                         <td>200</td>
                         <td id="res200Tot">0 DIN</td>
@@ -174,7 +174,7 @@
                 <span class="fv" id="fCollectedWrap"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> DIN</span>
             </div>
             <div class="frow big">
-                <span>RAZLIKA (Fali / Višak)</span>
+                <span>RAZLIKA (+/-)</span>
                 <span class="fv" id="fDiff">0 DIN</span>
             </div>
         </div>
