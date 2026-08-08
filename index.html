@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Obračun</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root{
@@ -18,8 +20,8 @@
             --ink:#f2ece0;
             --ink-muted:#a89f8e;
             --ink-faint:#6f6858;
-            --danger:#c0655f;
-            --success:#93a980;
+            --danger:#d45d55;
+            --success:#80b960;
             --radius:3px;
         }
         *{box-sizing:border-box;margin:0;padding:0}
@@ -90,7 +92,7 @@
 
         .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
         .form-group label{display:block;font-size:10.5px;font-weight:500;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:9px}
-        input, select{transition:all .2s ease;outline:none;font-family:'Jost',sans-serif;}
+        input, select, textarea, button{transition:all .2s ease;outline:none;font-family:'Jost',sans-serif !important;}
         .form-group input{
             width:100%;padding:11px 12px;background:var(--panel-alt);color:var(--ink);
             border:1px solid var(--hairline-strong);border-radius:var(--radius);font-size:14px;
@@ -99,16 +101,17 @@
         .form-group input::placeholder{color:var(--ink-faint)}
 
         /* ---------- Stat ledger row ---------- */
-        .stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden}
+        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--hairline);border-radius:var(--radius);overflow:hidden}
         .stat-input-card{
             background:var(--panel-alt);padding:16px 10px;text-align:center;
             border-right:1px solid var(--hairline);display:flex;flex-direction:column;align-items:center;gap:8px;
         }
-        .stat-input-card:last-child{border-right:none}
+        .stat-input-card:nth-child(4){border-right:none}
+        .stat-input-card:nth-child(5){grid-column:span 4;border-right:none;border-top:1px solid var(--hairline)}
         .stat-input-card .lbl{font-size:9.5px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
         .stat-input-card input{
             width:100%;border:none;text-align:center;background:transparent;color:var(--ink);
-            font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;
+            font-family:'Jost',sans-serif;font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;
         }
         .stat-input-card.readonly{background:rgba(147,169,128,.08)}
         .stat-input-card.readonly input{pointer-events:none;color:var(--success)}
@@ -119,9 +122,10 @@
         th{
             padding:10px 12px;text-align:left;font-size:10px;color:var(--ink-muted);
             text-transform:uppercase;letter-spacing:.12em;font-weight:500;border-bottom:1px solid var(--hairline-strong);
+            font-family:'Jost',sans-serif;
         }
-        td{padding:14px 12px;border-bottom:1px solid var(--hairline);font-size:14px;color:var(--ink)}
-        .total-row td{font-weight:600;color:var(--gold-bright);border-bottom:none;border-top:1px solid var(--hairline-strong);font-family:'Cormorant Garamond',serif;font-size:17px}
+        td{padding:14px 12px;border-bottom:1px solid var(--hairline);font-size:14px;color:var(--ink);font-family:'Jost',sans-serif;font-variant-numeric:tabular-nums;}
+        .total-row td{font-weight:600;color:var(--gold-bright);border-bottom:none;border-top:1px solid var(--hairline-strong);font-family:'Jost',sans-serif;font-size:16px}
 
         /* ---------- Final summary ---------- */
         .final{
@@ -133,10 +137,13 @@
             color:var(--gold-bright);margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--hairline);
         }
         .frow{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--hairline);font-size:13.5px;color:var(--ink-muted)}
-        .frow .fv{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+        .frow .fv{color:var(--ink);font-weight:500;font-family:'Jost',sans-serif;font-variant-numeric:tabular-nums}
         .frow.big{margin-top:8px;padding-top:20px;border-top:1px solid var(--hairline-strong);border-bottom:none;align-items:baseline}
         .frow.big span:first-child{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-muted)}
-        .frow.big .fv{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:var(--gold-bright)}
+        .frow.big .fv{font-family:'Jost',sans-serif;font-size:30px;font-weight:700;}
+
+        .diff-positive { color: #4cd964 !important; }
+        .diff-negative { color: #ff4d4f !important; }
 
         .add-btn{
             margin-top:16px;background:transparent;color:var(--gold);border:1px solid var(--hairline-strong);
@@ -152,10 +159,10 @@
         .del-btn:hover{background:rgba(192,101,95,.1)}
         .inp-dark{
             background:var(--panel-alt);border:1px solid var(--hairline-strong);color:var(--ink);
-            padding:8px 12px;border-radius:var(--radius);width:130px;text-align:right;font-size:16px;font-family:'Jost',sans-serif;
+            padding:8px 12px;border-radius:var(--radius);width:130px;text-align:right;font-size:16px;font-family:'Jost',sans-serif;font-weight:600;font-variant-numeric:tabular-nums;
         }
         .inp-dark:focus{border-color:var(--gold)}
-        .inp-slike200{width:72px;padding:8px;background:var(--panel-alt);color:var(--ink);border:1px solid var(--hairline-strong);border-radius:var(--radius);font-size:15px;text-align:center;font-weight:600;}
+        .inp-slike200{width:72px;padding:8px;background:var(--panel-alt);color:var(--gold-bright);border:1px solid var(--hairline-strong);border-radius:var(--radius);font-family:'Jost',sans-serif;font-size:16px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;}
         .inp-slike200:focus{border-color:var(--gold)}
 
         .pdf-mode .add-btn, .pdf-mode .del-btn, .pdf-mode .actions-bar { display: none !important; }
@@ -163,9 +170,11 @@
         @media (max-width: 600px) {
             .header{flex-direction:column;align-items:flex-start;gap:16px;padding:26px 22px}
             .header-meta{text-align:left}
-            .stats-grid{grid-template-columns:repeat(3,1fr)}
-            .stat-input-card:nth-child(4){border-right:none}
-            .stat-input-card:nth-child(5){grid-column:span 3;border-right:none;border-top:1px solid var(--hairline)}
+            .stats-grid{grid-template-columns:repeat(2,1fr)}
+            .stat-input-card:nth-child(2){border-right:none}
+            .stat-input-card:nth-child(3){border-top:1px solid var(--hairline)}
+            .stat-input-card:nth-child(4){border-right:none;border-top:1px solid var(--hairline)}
+            .stat-input-card:nth-child(5){grid-column:span 2;border-right:none;border-top:1px solid var(--hairline)}
             .frow{flex-direction:column;align-items:flex-start;gap:6px}
             .frow.big{align-items:flex-start}
             .inp-dark{width:100%;margin-top:5px}
@@ -193,7 +202,7 @@
             <h2><span class="num">I</span>Osnovni Podaci</h2>
             <div class="form-grid">
                 <div class="form-group"><label>Ime Sale</label><input type="text" id="saleName" placeholder="Naziv sale..." oninput="updateHeader()"></div>
-                <div class="form-group"><label>Datum</label><input type="date" id="eventDate" oninput="updateHeader()"></div>
+                <div class="form-group"><label>Datum</label><input type="text" id="eventDate" placeholder="dd.mm.yyyy." oninput="updateHeader()"></div>
                 <div class="form-group"><label>Mladenci</label><input type="text" id="couple" placeholder="Ime i prezime..." oninput="updateHeader()"></div>
             </div>
         </div>
@@ -229,13 +238,13 @@
             <div class="table-scroll">
             <table>
                 <thead>
-                    <tr><th>Stavka / Opis</th><th>Iznos</th><th>Valuta</th><th>Ukupno (DIN)</th><th></th></tr>
+                    <tr><th>Stavka / Opis</th><th>Iznos</th><th>Valuta</th><th>Ukupno (RSD)</th><th></th></tr>
                 </thead>
                 <tbody id="extraCostsBody"></tbody>
                 <tfoot>
                     <tr class="total-row">
                         <td colspan="3">SUMA TROŠKOVA</td>
-                        <td id="totExtraCosts">0 DIN</td>
+                        <td id="totExtraCosts">0 RSD</td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -256,17 +265,17 @@
                         <td>Slika 200 RSD<br><small style="color:var(--ink-faint)">(Uža porodica/kumovi)</small></td>
                         <td><input type="number" id="inp200Qty" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" class="inp-slike200"></td>
                         <td>200</td>
-                        <td id="res200Tot">0 DIN</td>
+                        <td id="res200Tot">0 RSD</td>
                     </tr>
                     <tr>
                         <td>Slika 300 RSD<br><small style="color:var(--ink-faint)">(Gosti)</small></td>
-                        <td id="res300Qty" style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;color:var(--gold-bright)">0</td>
+                        <td id="res300Qty" style="font-family:'Jost',sans-serif;font-size:16px;font-weight:700;color:var(--gold-bright)">0</td>
                         <td>300</td>
-                        <td id="res300Tot">0 DIN</td>
+                        <td id="res300Tot">0 RSD</td>
                     </tr>
                 </tbody>
                 <tfoot>
-                    <tr class="total-row"><td colspan="3">TEORIJSKI PAZAR</td><td id="grandTotal">0 DIN</td></tr>
+                    <tr class="total-row"><td colspan="3">TEORIJSKI PAZAR</td><td id="grandTotal">0 RSD</td></tr>
                 </tfoot>
             </table>
             </div>
@@ -274,15 +283,15 @@
 
         <div class="final">
             <h2>Finalni Obračun</h2>
-            <div class="frow"><span>Teorijski pazar (Prihod)</span><span class="fv" id="fNeeded">0 DIN</span></div>
-            <div class="frow" style="opacity:0.7;"><span>Ukupni troškovi (Informativno)</span><span class="fv" id="fMinusCosts">0 DIN</span></div>
+            <div class="frow"><span>Teorijski pazar (Prihod)</span><span class="fv" id="fNeeded">0 RSD</span></div>
+            <div class="frow"><span>Ukupni troškovi (Informativno)</span><span class="fv" id="fMinusCosts">0 RSD</span></div>
             <div class="frow">
                 <span>Stvarno stanje u kasi</span>
-                <span class="fv" id="fCollectedWrap"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> DIN</span>
+                <span class="fv" id="fCollectedWrap"><input class="inp-dark" type="number" id="fCollected" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()"> RSD</span>
             </div>
             <div class="frow big">
                 <span>RAZLIKA (+/-)</span>
-                <span class="fv" id="fDiff">0 DIN</span>
+                <span class="fv" id="fDiff">0 RSD</span>
             </div>
         </div>
     </div>
@@ -292,13 +301,25 @@
 const N = n => n.toLocaleString('sr-RS');
 const KURS = 117;
 
+window.addEventListener('DOMContentLoaded', () => {
+    flatpickr("#eventDate", {
+        dateFormat: "d.m.Y.",
+        defaultDate: "today",
+        onChange: function() {
+            updateHeader();
+        }
+    });
+    updateHeader();
+    calculate();
+});
+
 function addExtraCostRow() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
         <td><input type="text" placeholder="Opis..." style="width:100%; border:none; background:transparent; color:var(--ink); font-family:'Jost',sans-serif; font-size:14px;"></td>
-        <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:100%; border:none; background:transparent; color:var(--ink); font-family:'Jost',sans-serif; font-size:14px;"></td>
-        <td><select onchange="calculate()" style="border:none; background:transparent; color:var(--ink); font-family:'Jost',sans-serif; font-size:14px;"><option value="DIN" style="background:#1c1914">DIN</option><option value="EUR" style="background:#1c1914">EUR</option></select></td>
-        <td class="row-din" style="color:var(--gold-bright); font-weight:500;">0 DIN</td>
+        <td><input type="number" value="0" inputmode="numeric" pattern="[0-9]*" oninput="calculate()" onfocus="this.select()" style="width:100%; border:none; background:transparent; color:var(--ink); font-family:'Jost',sans-serif; font-size:14px; font-weight:600; font-variant-numeric:tabular-nums;"></td>
+        <td><select onchange="calculate()" style="border:none; background:transparent; color:var(--ink); font-family:'Jost',sans-serif; font-size:14px;"><option value="RSD" style="background:#1c1914">RSD</option><option value="EUR" style="background:#1c1914">EUR</option></select></td>
+        <td class="row-din" style="color:var(--gold-bright); font-weight:600; font-family:'Jost',sans-serif;">0 RSD</td>
         <td><button class="del-btn" onclick="this.closest('tr').remove(); calculate()">✕</button></td>
     `;
     document.getElementById('extraCostsBody').appendChild(tr);
@@ -318,42 +339,44 @@ function calculate() {
 
     document.getElementById('sZaProdaju').value       = zaProdaju;
     document.getElementById('res300Qty').textContent  = N(slike300);
-    document.getElementById('res200Tot').textContent  = N(slike200 * 200) + ' DIN';
-    document.getElementById('res300Tot').textContent  = N(slike300 * 300) + ' DIN';
-    document.getElementById('grandTotal').textContent = N(prihod) + ' DIN';
+    document.getElementById('res200Tot').textContent  = N(slike200 * 200) + ' RSD';
+    document.getElementById('res300Tot').textContent  = N(slike300 * 300) + ' RSD';
+    document.getElementById('grandTotal').textContent = N(prihod) + ' RSD';
 
     let totalExtraDin = 0;
     document.querySelectorAll('#extraCostsBody tr').forEach(tr => {
         const val   = parseFloat(tr.querySelectorAll('input')[1].value) || 0;
         const curr  = tr.querySelector('select').value;
         const inDin = curr === 'EUR' ? val * KURS : val;
-        tr.querySelector('.row-din').textContent = N(inDin) + ' DIN';
+        tr.querySelector('.row-din').textContent = N(inDin) + ' RSD';
         totalExtraDin += inDin;
     });
-    document.getElementById('totExtraCosts').textContent = N(totalExtraDin) + ' DIN';
+    document.getElementById('totExtraCosts').textContent = N(totalExtraDin) + ' RSD';
 
     const collected = parseFloat(document.getElementById('fCollected').value) || 0;
     const razlika   = collected - prihod;
 
-    document.getElementById('fNeeded').textContent     = N(prihod) + ' DIN';
-    document.getElementById('fMinusCosts').textContent = N(totalExtraDin) + ' DIN';
+    document.getElementById('fNeeded').textContent     = N(prihod) + ' RSD';
+    document.getElementById('fMinusCosts').textContent = N(totalExtraDin) + ' RSD';
 
     const diffEl = document.getElementById('fDiff');
-    diffEl.textContent = (razlika >= 0 ? '+' : '') + N(razlika) + ' DIN';
-    diffEl.style.color = razlika >= 0 ? '#93a980' : '#c0655f';
+    const sign = razlika >= 0 ? '+' : '';
+    diffEl.textContent = sign + N(razlika) + ' RSD';
+
+    diffEl.classList.remove('diff-positive', 'diff-negative');
+    if (razlika >= 0) {
+        diffEl.classList.add('diff-positive');
+    } else {
+        diffEl.classList.add('diff-negative');
+    }
 }
 
 function updateHeader() {
     const rawDate = document.getElementById('eventDate').value;
-    let formattedDate = '';
-    if (rawDate) {
-        const d = new Date(rawDate);
-        formattedDate = d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear() + '.';
-    }
     const sala     = document.getElementById('saleName').value || 'Bez naziva';
     const mladenci = document.getElementById('couple').value   || '';
     const mladenciLine = mladenci ? `<br>${mladenci}` : '';
-    document.getElementById('headerMeta').innerHTML = `${sala}<br>${formattedDate}${mladenciLine}`;
+    document.getElementById('headerMeta').innerHTML = `${sala}<br>${rawDate}${mladenciLine}`;
 }
 
 function generatePDF() {
@@ -367,8 +390,7 @@ function generatePDF() {
     const mladenci = document.getElementById('couple').value   || '';
     let datePart   = '';
     if (rawDate) {
-        const d = new Date(rawDate);
-        datePart = '_' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+        datePart = '_' + rawDate.replace(/\./g, '-').replace(/-$/, '');
     }
     const mladenciPart = mladenci ? '_' + mladenci.replace(/\s+/g, '_') : '';
     const filename = (sala.replace(/\s+/g, '_') + datePart + mladenciPart + '.pdf')
@@ -413,8 +435,12 @@ function generatePDF() {
         #print-area th { color: var(--pdf-ink-muted) !important; border-color: var(--pdf-line) !important; }
         #print-area td { color: var(--pdf-ink) !important; border-color: var(--pdf-line) !important; }
         #print-area .total-row td { color: var(--pdf-gold) !important; border-color: var(--pdf-line) !important; }
-        #print-area .frow { color: var(--pdf-ink-muted) !important; border-color: var(--pdf-line) !important; }
+        #print-area .frow { color: var(--pdf-ink) !important; font-weight: 500 !important; border-color: var(--pdf-line) !important; }
+        #print-area .frow span:first-child { color: var(--pdf-ink) !important; }
+        #print-area .frow .fv:not(#fDiff) { color: var(--pdf-ink) !important; }
         #print-area .frow.big { border-color: var(--pdf-gold) !important; }
+        #print-area .diff-positive { color: #2e7d32 !important; }
+        #print-area .diff-negative { color: #c62828 !important; }
     `;
     document.head.appendChild(styleOverride);
 
@@ -425,10 +451,10 @@ function generatePDF() {
         const span = document.createElement('span');
         span.textContent = inp.value;
         if (inp.classList.contains('inp-dark')) {
-            span.style.cssText = 'color:#a3823f; font-family:Cormorant Garamond,serif; font-size:22px; font-weight:700;';
+            span.style.cssText = 'color:#a3823f; font-family:Jost,sans-serif; font-size:20px; font-weight:700;';
         } else if (inp.closest('.stat-input-card')) {
             const isSkart = inp.closest('.stat-input-card') === statCards[1];
-            span.style.cssText = `font-family:Cormorant Garamond,serif; font-size:22px; font-weight:600; color:${isSkart ? '#a3453e' : '#2a2418'};`;
+            span.style.cssText = `font-family:Jost,sans-serif; font-size:20px; font-weight:600; color:${isSkart ? '#a3453e' : '#2a2418'};`;
         } else if (inp.classList.contains('inp-slike200')) {
             span.style.cssText = 'font-size:15px; font-weight:700; color:#2a2418;';
         } else {
@@ -474,24 +500,7 @@ function generatePDF() {
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    // Ručno generišemo blob i sami kontrolišemo download,
-    // umesto da se oslanjamo na html2pdf .save() koji na nekim
-    // in-app/webview browserima ignoriše download atribut i
-    // otvara sirovi blob: URL umesto da sačuva fajl pod imenom.
-    html2pdf().set(opt).from(printArea).toPdf().output('blob').then(blob => {
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = filename;
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        setTimeout(() => {
-            URL.revokeObjectURL(blobUrl);
-        }, 30000);
-
+    html2pdf().set(opt).from(printArea).save().then(() => {
         restore();
     }).catch(err => {
         console.error('Greška pri generisanju PDF-a:', err);
